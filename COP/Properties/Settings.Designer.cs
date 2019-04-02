@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CDP.Properties
+namespace COP.Properties
 {
 
 

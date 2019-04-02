@@ -1,4 +1,4 @@
-﻿namespace CDP
+﻿namespace COP
 {
     partial class Form1
     {

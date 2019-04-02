@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP", "CDP\CDP.csproj", "{FE57E66D-3E60-493A-B137-E091C0ACAB42}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COP", "COP\COP.csproj", "{FE57E66D-3E60-493A-B137-E091C0ACAB42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
