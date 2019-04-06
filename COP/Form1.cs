@@ -19,7 +19,7 @@ namespace COP
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            
             string[] args = Environment.GetCommandLineArgs();
             if(args.Length == 1)
             {
@@ -38,6 +38,7 @@ namespace COP
                     "Error",
                     MessageBoxButtons.OK);
             }
+            
         }
     }
 }

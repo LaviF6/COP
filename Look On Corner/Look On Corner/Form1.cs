@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using FastBitmapLib;
 
 namespace Look_On_Corner
 {
@@ -15,7 +16,10 @@ namespace Look_On_Corner
         int zoom;
         Size sizeToCopy;
         Bitmap start, end;
+        PictureBox pb;
+        FastBitmap endFB, startFB;
         Graphics g;
+        bool isOK;
 
         public Form1()
         {
@@ -24,41 +28,66 @@ namespace Look_On_Corner
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            
-            zoom = 10;
-            sizeToCopy = new Size(10, 10);
-            timer1.Interval = 100;
+            string[] args = Environment.GetCommandLineArgs();
+            if(args.Length == 2)
+            {
+                isOK = true;
+                FormBorderStyle = FormBorderStyle.None;
+                zoom = Int32.Parse(args[1]);
+                sizeToCopy = new Size(10, 10);
+                timer1.Interval = 16;
 
-            start = new Bitmap(sizeToCopy.Height, sizeToCopy.Width);
-            end = new Bitmap(sizeToCopy.Height * zoom, sizeToCopy.Width * zoom);
-            this.Size = new Size(sizeToCopy.Height * zoom, sizeToCopy.Width * zoom);
-            this.Location = new Point(700, 0);
-            g = Graphics.FromImage(start);
+                start = new Bitmap(sizeToCopy.Height, sizeToCopy.Width);
+                end = new Bitmap(sizeToCopy.Height * zoom, sizeToCopy.Width * zoom);
+
+                startFB = new FastBitmap(start);
+                endFB = new FastBitmap(end);
+
+                Size = new Size(sizeToCopy.Height * zoom, sizeToCopy.Width * zoom);
+                Location = new Point(700, 0);
+
+                pb = new PictureBox();
+                pb.Size = new Size(end.Size.Width, end.Size.Height);
+                pb.Location = new Point(0, 0);
+                Controls.Add(pb);
+
+                g = Graphics.FromImage(start);
+            }
+            else
+            {
+                isOK = false;
+            }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            g.CopyFromScreen(0, 0, 0, 0, sizeToCopy);
-
-            for(int xStart = 0; xStart < sizeToCopy.Width; xStart++)
+            if(isOK)
             {
-                for (int yStart = 0; yStart < sizeToCopy.Height; yStart++)
+                g.CopyFromScreen(0, 0, 0, 0, sizeToCopy);
+
+                endFB.Lock();
+                startFB.Lock();
+                for (int xStart = 0; xStart < sizeToCopy.Width; xStart++)
                 {
-                    for (int xEnd = 0; xEnd < sizeToCopy.Width; xEnd++)
+                    for (int yStart = 0; yStart < sizeToCopy.Height; yStart++)
                     {
-                        for (int yEnd = 0; yEnd < sizeToCopy.Height; yEnd++)
+                        for (int xEnd = xStart * zoom; xEnd < (xStart + 1) * zoom; xEnd++)
                         {
-                            end.SetPixel((xStart * zoom) + xEnd, (yStart * zoom) + yEnd, start.GetPixel(xStart, yStart));
+                            for (int yEnd = yStart * zoom; yEnd < (yStart + 1) * zoom; yEnd++)
+                            {
+                                endFB.SetPixel(xEnd, yEnd, startFB.GetPixel(xStart, yStart));
+                            }
                         }
                     }
                 }
+
+                endFB.Unlock();
+                startFB.Unlock();
+                TopMost = true;
+                TopMost = false;
+
+                pb.Image = end;
             }
-
-            TopMost = true;
-            TopMost = false;
-
-            pictureBox1.Image = end;
         }
     }
 }
