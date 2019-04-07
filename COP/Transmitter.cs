@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using FastBitmapLib;
 
 namespace COP
 {
@@ -21,6 +22,7 @@ namespace COP
 
         //Array of pixels
         private Bitmap _image;
+        private FastBitmap _fastImage;
 
         //The file name and data
         private byte[][] _file_data;
@@ -55,6 +57,8 @@ namespace COP
             _form = form;
             _form.Location = new Point(0, 0);
             _form.FormBorderStyle = FormBorderStyle.None;
+            _form.Size = new Size(0, 0);
+            _form.BackColor = Color.Black;
 
             _board = new PictureBox();
             _board.Location = new Point(0, 0);
@@ -63,7 +67,7 @@ namespace COP
             _current_window_size = new Size(0, 0);
 
             _timer = new Timer();
-            _timer.Interval = 100;
+            _timer.Interval = 16;
             _timer.Tick += timerTick;
         }
 
@@ -94,7 +98,7 @@ namespace COP
                     broadcast_message();
                     break;
                 case 3:
-                    _timer.Enabled = false;
+                    exitProg();
                     break;
             }
         }
@@ -103,21 +107,21 @@ namespace COP
         {
             TestAndReSizeTheSizes(_defines.Contact_Window_Size);
 
-            if (_step_status == 6)
+            Color c = _step_status % 2 == 0 ?
+                new_pixel(0, 0, 255) :
+                new_pixel(0, 255, 0);
+
+            _image.SetPixel(0, 0, c);
+
+            launch();
+
+            _step_status++;
+
+            if (_step_status == 5)
             {
                 _program_status++;
+                _step_status = 0;
             }
-            else
-            {
-                Color c = _step_status % 2 == 0 ?
-                    new_pixel(0, 0, 255) :
-                    new_pixel(0, 255, 0);
-
-                _image.SetPixel(0, 0, c);
-
-                launch();
-            }
-            _step_status++;
         }
 
         private void broadcast_header()
@@ -147,52 +151,38 @@ namespace COP
 
             _image.SetPixel(1, 1, new_pixel(
                 data_arr[3],
-                data_arr[4]
-                , data_arr[5]));
+                data_arr[4],
+                data_arr[5]));
 
             launch();
             _program_status++;
+            _step_status = 0;
         }
 
         private void broadcast_message()
         {
-            /*
-            if (_step_status == 0)
+            TestAndReSizeTheSizes(_defines.Broadcast_Window_Size);
+
+            if (_step_status == 2)
+            {
+                _program_status++;
+                exitProg();
+            }
+
+            _fastImage.Lock();
+            for (int y = 0; y < _current_window_size.Height; y++)
             {
                 for (int x = 0; x < _current_window_size.Width; x++)
                 {
-                    for (int y = 0; y < _current_window_size.Height; y++)
-                    {
-                        _image.SetPixel(x, y, new_pixel(
-                            _file_name[_name_index++],
-                            _file_name[_name_index++],
-                            _file_name[_name_index++]));
-                    }
+                    _fastImage.SetPixel(x, y, new_pixel(
+                         next_byte(_step_status),
+                         next_byte(_step_status),
+                         next_byte(_step_status)));
                 }
             }
-            else
-            {
+            _fastImage.Unlock();
 
-            }
-
-            /*
-            int imageAmount = _message.Length /
-                (_defines.Broadcast_Window_Size.Width * _defines.Broadcast_Window_Size.Height);
-            for (int imageIndex = 0; imageIndex < imageAmount; imageIndex++)
-            {
-                for(int x = 0; x < _defines.Broadcast_Window_Size.Width; x++)
-                {
-                    for (int y = 0; y < _defines.Broadcast_Window_Size.Height; y++)
-                    {
-                        _image.SetPixel(x, y, pixel(
-                            nextMassageByte(),
-                            nextMassageByte(),
-                            nextMassageByte()));
-                    }
-                }
-                launch();
-            }
-            */
+            launch();
         }
     }
 }

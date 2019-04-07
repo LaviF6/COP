@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using FastBitmapLib;
 
 namespace COP
 {
@@ -19,6 +20,7 @@ namespace COP
                 _form.Size = newSize;
                 _board.Size = newSize;
                 _image = new Bitmap(newSize.Width, newSize.Height);
+                _fastImage = new FastBitmap(_image);
                 _current_window_size = newSize;
                 return true;
             }
@@ -49,9 +51,16 @@ namespace COP
         private byte next_byte(int from)
         {
             byte ret = _defines.defult;
-            if(_file_indexs[from] < _file_data[from].Length)
+            if(from < 2)
             {
-                ret = _file_data[from][_file_indexs[from]++];
+                if (_file_indexs[from] < _file_data[from].Length)
+                {
+                    ret = _file_data[from][_file_indexs[from]++];
+                }
+                else if (_file_indexs[from] == _file_data[from].Length)
+                {
+                    _step_status++;
+                }
             }
             return ret;
         }
@@ -69,6 +78,11 @@ namespace COP
                 arr[i] = (byte)(number >> (8 * i) & 0xff);
             }
             return arr;
+        }
+         private void exitProg()
+        {
+            _timer.Enabled = false;
+            Application.Exit();
         }
     }
 }

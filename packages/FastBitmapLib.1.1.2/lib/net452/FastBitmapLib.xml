@@ -1,0 +1,330 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FastBitmapLib</name>
+    </assembly>
+    <members>
+        <member name="T:FastBitmapLib.FastBitmap">
+            <summary>
+            Encapsulates a Bitmap for fast bitmap pixel operations using 32bpp images
+            </summary>
+        </member>
+        <member name="F:FastBitmapLib.FastBitmap.BytesPerPixel">
+            <summary>
+            Specifies the number of bytes available per pixel of the bitmap object being manipulated
+            </summary>
+        </member>
+        <member name="F:FastBitmapLib.FastBitmap._bitmap">
+            <summary>
+            The Bitmap object encapsulated on this FastBitmap
+            </summary>
+        </member>
+        <member name="F:FastBitmapLib.FastBitmap._bitmapData">
+            <summary>
+            The BitmapData resulted from the lock operation
+            </summary>
+        </member>
+        <member name="F:FastBitmapLib.FastBitmap._scan0">
+            <summary>
+            The first pixel of the bitmap
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.Width">
+            <summary>
+            Gets the width of this FastBitmap object
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.Height">
+            <summary>
+            Gets the height of this FastBitmap object
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.Scan0">
+            <summary>
+            Gets the pointer to the first pixel of the bitmap
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.Stride">
+            <summary>
+            Gets the stride width of the bitmap
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.Locked">
+            <summary>
+            Gets a boolean value that states whether this FastBitmap is currently locked in memory
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.DataArray">
+            <summary>
+            Gets an array of 32-bit color pixel values that represent this FastBitmap
+            </summary>
+            <exception cref="T:System.Exception">The locking operation required to extract the values off from the underlying bitmap failed</exception>
+            <exception cref="T:System.InvalidOperationException">The bitmap is already locked outside this fast bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.#ctor(System.Drawing.Bitmap)">
+            <summary>
+            Creates a new instance of the FastBitmap class with a specified Bitmap.
+            The bitmap provided must have a 32bpp depth
+            </summary>
+            <param name="bitmap">The Bitmap object to encapsulate on this FastBitmap object</param>
+            <exception cref="T:System.ArgumentException">The bitmap provided does not have a 32bpp pixel format</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Dispose">
+            <summary>
+            Disposes of this fast bitmap object and releases any pending resources.
+            The underlying bitmap is not disposes, and is unlocked, if currently locked
+            </summary>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Lock">
+            <summary>
+            Locks the bitmap to start the bitmap operations. If the bitmap is already locked,
+            an exception is thrown
+            </summary>
+            <returns>A fast bitmap locked struct that will unlock the underlying bitmap after disposal</returns>
+            <exception cref="T:System.InvalidOperationException">The bitmap is already locked</exception>
+            <exception cref="T:System.Exception">The locking operation in the underlying bitmap failed</exception>
+            <exception cref="T:System.InvalidOperationException">The bitmap is already locked outside this fast bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Lock(System.Drawing.Imaging.ImageLockMode)">
+            <summary>
+            Locks the bitmap to start the bitmap operations
+            </summary>
+            <param name="lockMode">The lock mode to use on the bitmap</param>
+            <returns>A fast bitmap locked struct that will unlock the underlying bitmap after disposal</returns>
+            <exception cref="T:System.Exception">The locking operation in the underlying bitmap failed</exception>
+            <exception cref="T:System.InvalidOperationException">The bitmap is already locked outside this fast bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Lock(System.Drawing.Imaging.ImageLockMode,System.Drawing.Rectangle)">
+            <summary>
+            Locks the bitmap to start the bitmap operations
+            </summary>
+            <param name="lockMode">The lock mode to use on the bitmap</param>
+            <param name="rect">The rectangle to lock</param>
+            <returns>A fast bitmap locked struct that will unlock the underlying bitmap after disposal</returns>
+            <exception cref="T:System.ArgumentException">The provided region is invalid</exception>
+            <exception cref="T:System.Exception">The locking operation in the underlying bitmap failed</exception>
+            <exception cref="T:System.InvalidOperationException">The bitmap region is already locked</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Unlock">
+            <summary>
+            Unlocks the bitmap and applies the changes made to it. If the bitmap was not locked
+            beforehand, an exception is thrown
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The bitmap is already unlocked</exception>
+            <exception cref="T:System.Exception">The unlocking operation in the underlying bitmap failed</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.SetPixel(System.Int32,System.Int32,System.Drawing.Color)">
+            <summary>
+            Sets the pixel color at the given coordinates. If the bitmap was not locked beforehands,
+            an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to set</param>
+            <param name="y">The Y coordinate of the pixel to set</param>
+            <param name="color">The new color of the pixel to set</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.SetPixel(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Sets the pixel color at the given coordinates. If the bitmap was not locked beforehands,
+            an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to set</param>
+            <param name="y">The Y coordinate of the pixel to set</param>
+            <param name="color">The new color of the pixel to set</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.SetPixel(System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            Sets the pixel color at the given coordinates. If the bitmap was not locked beforehands,
+            an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to set</param>
+            <param name="y">The Y coordinate of the pixel to set</param>
+            <param name="color">The new color of the pixel to set</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.GetPixel(System.Int32,System.Int32)">
+            <summary>
+            Gets the pixel color at the given coordinates. If the bitmap was not locked beforehands,
+            an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to get</param>
+            <param name="y">The Y coordinate of the pixel to get</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.GetPixelInt(System.Int32,System.Int32)">
+            <summary>
+            Gets the pixel color at the given coordinates as an integer value. If the bitmap
+            was not locked beforehands, an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to get</param>
+            <param name="y">The Y coordinate of the pixel to get</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.GetPixelUInt(System.Int32,System.Int32)">
+            <summary>
+            Gets the pixel color at the given coordinates as an unsigned integer value.
+            If the bitmap was not locked beforehands, an exception is thrown
+            </summary>
+            <param name="x">The X coordinate of the pixel to get</param>
+            <param name="y">The Y coordinate of the pixel to get</param>
+            <exception cref="T:System.InvalidOperationException">The fast bitmap is not locked</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">The provided coordinates are out of bounds of the bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.CopyFromArray(System.Int32[],System.Boolean)">
+            <summary>
+            Copies the contents of the given array of colors into this FastBitmap.
+            Throws an ArgumentException if the count of colors on the array mismatches the pixel count from this FastBitmap
+            </summary>
+            <param name="colors">The array of colors to copy</param>
+            <param name="ignoreZeroes">Whether to ignore zeroes when copying the data</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Clear(System.Drawing.Color)">
+            <summary>
+            Clears the bitmap with the given color
+            </summary>
+            <param name="color">The color to clear the bitmap with</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.Clear(System.Int32)">
+            <summary>
+            Clears the bitmap with the given color
+            </summary>
+            <param name="color">The color to clear the bitmap with</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.ClearRegion(System.Drawing.Rectangle,System.Drawing.Color)">
+            <summary>
+            Clears a square region of this image w/ a given color
+            </summary>
+            <param name="region"></param>
+            <param name="color"></param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.ClearRegion(System.Drawing.Rectangle,System.Int32)">
+            <summary>
+            Clears a square region of this image w/ a given color
+            </summary>
+            <param name="region"></param>
+            <param name="color"></param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.CopyRegion(System.Drawing.Bitmap,System.Drawing.Rectangle,System.Drawing.Rectangle)">
+            <summary>
+            Copies a region of the source bitmap into this fast bitmap
+            </summary>
+            <param name="source">The source image to copy</param>
+            <param name="srcRect">The region on the source bitmap that will be copied over</param>
+            <param name="destRect">The region on this fast bitmap that will be changed</param>
+            <exception cref="T:System.ArgumentException">The provided source bitmap is the same bitmap locked in this FastBitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.CopyPixels(System.Drawing.Bitmap,System.Drawing.Bitmap)">
+            <summary>
+            Performs a copy operation of the pixels from the Source bitmap to the Target bitmap.
+            If the dimensions or pixel depths of both images don't match, the copy is not performed
+            </summary>
+            <param name="source">The bitmap to copy the pixels from</param>
+            <param name="target">The bitmap to copy the pixels to</param>
+            <returns>Whether the copy proceedure was successful</returns>
+            <exception cref="T:System.ArgumentException">The provided source and target bitmaps are the same</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.ClearBitmap(System.Drawing.Bitmap,System.Drawing.Color)">
+            <summary>
+            Clears the given bitmap with the given color
+            </summary>
+            <param name="bitmap">The bitmap to clear</param>
+            <param name="color">The color to clear the bitmap with</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.ClearBitmap(System.Drawing.Bitmap,System.Int32)">
+            <summary>
+            Clears the given bitmap with the given color
+            </summary>
+            <param name="bitmap">The bitmap to clear</param>
+            <param name="color">The color to clear the bitmap with</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.CopyRegion(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Drawing.Rectangle,System.Drawing.Rectangle)">
+            <summary>
+            Copies a region of the source bitmap to a target bitmap
+            </summary>
+            <param name="source">The source image to copy</param>
+            <param name="target">The target image to be altered</param>
+            <param name="srcRect">The region on the source bitmap that will be copied over</param>
+            <param name="destRect">The region on the target bitmap that will be changed</param>
+            <exception cref="T:System.ArgumentException">The provided source and target bitmaps are the same bitmap</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.SliceBitmap(System.Drawing.Bitmap,System.Drawing.Rectangle)">
+            <summary>
+            Returns a bitmap that is a slice of the original provided 32bpp Bitmap.
+            The region must have a width and a height > 0, and must lie inside the source bitmap's area
+            </summary>
+            <param name="source">The source bitmap to slice</param>
+            <param name="region">The region of the source bitmap to slice</param>
+            <returns>A Bitmap that represents the rectangle region slice of the source bitmap</returns>
+            <exception cref="T:System.ArgumentException">The provided bimap is not 32bpp</exception>
+            <exception cref="T:System.ArgumentException">The provided region is invalid</exception>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.memcpy(System.IntPtr,System.IntPtr,System.UInt64)">
+            <summary>
+            .NET wrapper to native call of 'memcpy'. Requires Microsoft Visual C++ Runtime installed
+            </summary>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.memcpy(System.Void*,System.Void*,System.UInt64)">
+            <summary>
+            .NET wrapper to native call of 'memcpy'. Requires Microsoft Visual C++ Runtime installed
+            </summary>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.memset(System.Void*,System.Int32,System.UInt64)">
+            <summary>
+            .NET wrapper to native call of 'memset'. Requires Microsoft Visual C++ Runtime installed
+            </summary>
+        </member>
+        <member name="T:FastBitmapLib.FastBitmap.FastBitmapLocker">
+            <summary>
+            Represents a disposable structure that is returned during Lock() calls, and unlocks the bitmap on Dispose calls
+            </summary>
+        </member>
+        <member name="F:FastBitmapLib.FastBitmap.FastBitmapLocker._fastBitmap">
+            <summary>
+            The fast bitmap instance attached to this locker
+            </summary>
+        </member>
+        <member name="P:FastBitmapLib.FastBitmap.FastBitmapLocker.FastBitmap">
+            <summary>
+            Gets the fast bitmap instance attached to this locker
+            </summary>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.FastBitmapLocker.#ctor(FastBitmapLib.FastBitmap)">
+            <summary>
+            Initializes a new instance of the FastBitmapLocker struct with an initial fast bitmap object.
+            The fast bitmap object passed will be unlocked after calling Dispose() on this struct
+            </summary>
+            <param name="fastBitmap">A fast bitmap to attach to this locker which will be released after a call to Dispose</param>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmap.FastBitmapLocker.Dispose">
+            <summary>
+            Disposes of this FastBitmapLocker, essentially unlocking the underlying fast bitmap
+            </summary>
+        </member>
+        <member name="T:FastBitmapLib.FastBitmapExtensions">
+            <summary>
+            Static class that contains fast bitmap extension methdos for the Bitmap class
+            </summary>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmapExtensions.FastLock(System.Drawing.Bitmap)">
+            <summary>
+            Locks this bitmap into memory and returns a FastBitmap that can be used to manipulate its pixels
+            </summary>
+            <param name="bitmap">The bitmap to lock</param>
+            <returns>A locked FastBitmap</returns>
+        </member>
+        <member name="M:FastBitmapLib.FastBitmapExtensions.DeepClone(System.Drawing.Bitmap)">
+            <summary>
+            Returns a deep clone of this Bitmap object, with all the data copied over.
+            After a deep clone, the new bitmap is completely independent from the original
+            </summary>
+            <param name="bitmap">The bitmap to clone</param>
+            <returns>A deep clone of this Bitmap object, with all the data copied over</returns>
+        </member>
+    </members>
+</doc>
