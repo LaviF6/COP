@@ -12,36 +12,14 @@ using Pixel = System.Drawing.Color;
 namespace COP
 {
     
-    public partial class Transmitter
+    public partial class Transmitter : COPProtocol
     {
         ////////////////////////////////////
         ////// Statement of variables //////
         ////////////////////////////////////
-        //App
-        private Form1 _form;
-
         //Space on screen
         private PictureBox _board;
-
-        //Array of pixels
-        private Bitmap _image;
-        private FastBitmap _fastImage;
-
-        //The file name and data
-        private byte[][] _file_data;
-
-        //Timer
-        private Timer _timer;
-
-        //Defines class
-        private Defines _defines;
-
-        //Index of the stage in the program
-        private int _program_status;
-
-        //Index of the action in the sub-stage
-        private int _step_status;
-
+       
         //Message index
         private byte _message_index;
 
@@ -55,24 +33,11 @@ namespace COP
 
         public Transmitter(Form1 form)
         {
-            _defines = new Defines();
-
-            _form = form;
-            _form.FormBorderStyle = FormBorderStyle.None;
-
-            _form.Location = new Point(0, 0);
-            _form.Size = new Size(0, 0);
-            _form.BackColor = Color.Black;
-
             _board = new PictureBox();
             _board.Location = new Point(0, 0);
             _form.Controls.Add(_board);
 
             _current_window_size = new Size(0, 0);
-
-            _timer = new Timer();
-            _timer.Interval = _defines.timer_interval;
-            _timer.Tick += timerTick;
         }
 
         public void start(string file_path)
@@ -111,9 +76,7 @@ namespace COP
         {
             TestAndReSizeTheSizes(_defines.Contact_Window_Size);
 
-            Pixel c = _step_status % 2 == 0 ?
-                new_pixel(0, 0, 255) :
-                new_pixel(0, 255, 0);
+            Pixel c = _step_status % 2 == 0 ? new_pixel(0, 0, 255) : new_pixel(0, 255, 0);
 
             _image.SetPixel(0, 0, c);
 

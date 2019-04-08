@@ -12,7 +12,7 @@ using Pixel = System.Drawing.Color;
 
 namespace COP
 {
-    public partial class Transmitter
+    public partial class Transmitter : COPProtocol
     {
 
         private bool TestAndReSizeTheSizes(Size newSize)
