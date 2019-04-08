@@ -8,6 +8,8 @@ using System.Threading;
 using System.Windows.Forms;
 using FastBitmapLib;
 
+using Pixel = System.Drawing.Color;
+
 namespace COP
 {
     public partial class Transmitter
@@ -43,9 +45,9 @@ namespace COP
             _board.Image = _image;
         }
 
-        private Color new_pixel(byte r, byte g, byte b)
+        private Pixel new_pixel(byte r, byte g, byte b)
         {
-            return Color.FromArgb(r, g, b);
+            return Pixel.FromArgb(r, g, b);
         }
 
         private byte next_byte(int from)
@@ -55,7 +57,8 @@ namespace COP
             {
                 if (_file_indexs[from] < _file_data[from].Length)
                 {
-                    ret = _file_data[from][_file_indexs[from]++];
+                    ret = _file_data[from][_file_indexs[from]];
+                    _file_indexs[from] += 1;
                 }
                 else if (_file_indexs[from] == _file_data[from].Length)
                 {

@@ -16,6 +16,8 @@ namespace COP
             public int FILE_NAME = 0;
             public int DATA = 1;
 
+            public int timer_interval = 16;
+
             public byte Contact_sign = 255;
             public byte Zero = 0;
             public byte defult = 255;
@@ -24,7 +26,7 @@ namespace COP
 
             public Size Contact_Window_Size = new Size(1, 1);
             public Size Header_Window_Size = new Size(2, 2);
-            public Size Broadcast_Window_Size = new Size(300, 300);
+            public Size Broadcast_Window_Size = new Size(10, 10);
         }
     }
 }
