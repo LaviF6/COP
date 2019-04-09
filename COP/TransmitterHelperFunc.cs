@@ -14,7 +14,6 @@ namespace COP
 {
     public partial class Transmitter : COPProtocol
     {
-
         private bool TestAndReSizeTheSizes(Size newSize)
         {
             if (_current_window_size != newSize)
@@ -55,22 +54,17 @@ namespace COP
             byte ret = _defines.defult;
             if(from < 2)
             {
-                if (_file_indexs[from] < _file_data[from].Length)
+                if (_file_indexs[from] < (ulong)_file_data[from].Length)
                 {
                     ret = _file_data[from][_file_indexs[from]];
                     _file_indexs[from] += 1;
                 }
-                else if (_file_indexs[from] == _file_data[from].Length)
+                else if (_file_indexs[from] == (ulong)_file_data[from].Length)
                 {
                     _step_status++;
                 }
             }
             return ret;
-        }
-
-        private byte get_index()
-        {
-            return _message_index++;
         }
 
         private byte[] number_to_byte_array(long number, int arraySize)
@@ -81,11 +75,6 @@ namespace COP
                 arr[i] = (byte)(number >> (8 * i) & 0xff);
             }
             return arr;
-        }
-         private void exitProg()
-        {
-            _timer.Enabled = false;
-            Application.Exit();
         }
     }
 }

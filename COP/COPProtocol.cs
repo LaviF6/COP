@@ -28,7 +28,7 @@ namespace COP
             _timer.Tick += timerTick;
         }
 
-        protected abstract void timerTick(object sender, EventArgs e)
+        protected abstract void timerTick(object sender, EventArgs e);
 
         //App
         protected Form1 _form;
@@ -52,6 +52,9 @@ namespace COP
         //Index of the action in the sub-stage
         protected int _step_status;
 
+        //Displays the size of the current window
+        protected Size _current_window_size;
+
         protected class Defines
         {
             public int FILE_NAME = 0;
@@ -68,6 +71,12 @@ namespace COP
             public Size Contact_Window_Size = new Size(1, 1);
             public Size Header_Window_Size = new Size(2, 2);
             public Size Broadcast_Window_Size = new Size(10, 10);
+        }
+
+        protected void exitProg()
+        {
+            _timer.Enabled = false;
+            Application.Exit();
         }
     }
 }

@@ -14,24 +14,13 @@ namespace COP
     
     public partial class Transmitter : COPProtocol
     {
-        ////////////////////////////////////
-        ////// Statement of variables //////
-        ////////////////////////////////////
         //Space on screen
         private PictureBox _board;
-       
-        //Message index
-        private byte _message_index;
 
         //Index of the file name in the file text
-        private long[] _file_indexs;
-  
-        //Displays the size of the current window
-        private Size _current_window_size;
-        ///////////////////////////////////////
-        ///////////////////////////////////////
+        private ulong[] _file_indexs;
 
-        public Transmitter(Form1 form)
+        public Transmitter(Form1 form) : base(form)
         {
             _board = new PictureBox();
             _board.Location = new Point(0, 0);
@@ -40,20 +29,19 @@ namespace COP
             _current_window_size = new Size(0, 0);
         }
 
-        public void start(string file_path)
+        public void send(string file_path)
         {
             _program_status = 0;
             _step_status = 0;
-            _message_index = 0;
 
-            _file_indexs = new long[]{0, 0};
+            _file_indexs = new ulong[]{0, 0};
 
             read_file(file_path);
 
             _timer.Enabled = true;
         }
 
-        private void timerTick(object sender, EventArgs e)
+        protected override void timerTick(object sender, EventArgs e)
         {
             switch (_program_status)
             {
@@ -98,7 +86,7 @@ namespace COP
             _fastImage.Lock();
 
             _fastImage.SetPixel(0, 0, new_pixel(
-                    get_index(),
+                    0,
                     (byte)_defines.Broadcast_Window_Size.Height,
                     (byte)_defines.Broadcast_Window_Size.Width));
 
@@ -136,7 +124,6 @@ namespace COP
             if (_step_status == 2)
             {
                 _program_status++;
-                exitProg();
             }
 
             _fastImage.Lock();

@@ -23,12 +23,13 @@ namespace COP
             string[] args = Environment.GetCommandLineArgs();
             if(args.Length == 1)
             {
-                //Receiver r = new Receiver(this);
+                Receiver r = new Receiver(this);
+                r.start();
             }
             else if(args.Length == 2)
             {
                 Transmitter t = new Transmitter(this);
-                t.start(args[1]);
+                t.send(args[1]);
             }
             else
             {
