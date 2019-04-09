@@ -60,7 +60,7 @@ namespace COP
             public int FILE_NAME = 0;
             public int DATA = 1;
 
-            public int timer_interval = 16;
+            public int timer_interval = 1000;
 
             public byte Contact_sign = 255;
             public byte Zero = 0;
@@ -71,6 +71,8 @@ namespace COP
             public Size Contact_Window_Size = new Size(1, 1);
             public Size Header_Window_Size = new Size(2, 2);
             public Size Broadcast_Window_Size = new Size(10, 10);
+
+            public byte[,] Agreed_Mark = new byte[2, 2] { { 255, 0 }, { 0, 255 } };
         }
 
         protected void exitProg()
