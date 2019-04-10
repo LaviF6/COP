@@ -9,7 +9,7 @@ using FastBitmapLib;
 
 namespace COP
 {
-    public class Receiver : COPProtocol
+    public partial class Receiver : COPProtocol
     {
         Point collecting_point;
         Graphics g;
@@ -17,26 +17,8 @@ namespace COP
         //Message index
         private ulong _message_index;
         private Size _window_size;
-        private List<Pixel> _pixel_in_tracking;
+        private CodedPixel[,] _coded_screen_pixels;
 
-        private class Pixel
-        {
-            public Pixel()
-            {
-                _chance_sign = 0;
-            }
-            private int _chance_sign { set; get; }
-            private Point point { set; get; }
-            private Color color { set; get; }
-            public void reset()
-            {
-                _chance_sign = 0;
-            }
-            public void moreChance()
-            {
-                _chance_sign++;
-            }
-        }
 
         public Receiver(Form1 form) : base(form)
         {
@@ -46,6 +28,11 @@ namespace COP
 
             _current_window_size = _defines.Contact_Window_Size;
             _file_size = new ulong[2];
+
+
+            var screen_size = Screen.PrimaryScreen.WorkingArea;
+            _window_size = new Size(screen_size.Width, screen_size.Height);
+            _coded_screen_pixels = new CodedPixel[screen_size.Width, screen_size.Height];
         }
 
         public void start()
@@ -55,10 +42,7 @@ namespace COP
             _message_index = 0;
             _timer.Enabled = true;
 
-            var screen_size = Screen.PrimaryScreen.WorkingArea;
-            _window_size = new Size(screen_size.Width, screen_size.Height);
             _current_window_size = new Size(1, 1);
-            _pixel_in_tracking = new List<Pixel>();
         }
 
         protected override void timerTick(object sender, EventArgs e)
@@ -86,15 +70,16 @@ namespace COP
 
         private void findTransmitter()
         {
-            for(int x = 0; x < _window_size.Width; x++)
+            for (int x = 0; x < _window_size.Width; x++)
             {
                 for(int y = 0; y < _window_size.Height; y++)
                 {
-                    Color c = _fastImage.GetPixel(x, y);
-                    if ((c.G == _defines.Agreed_Mark[0,0] && c.B == _defines.Agreed_Mark[0,1]) ||
-                        (c.G == _defines.Agreed_Mark[1, 0] && c.B == _defines.Agreed_Mark[1, 1]))
+                    pixel_analysis(x,y);
+
+                    if(_coded_screen_pixels[x,y].getCompatibilityLevel() > 3)
                     {
-                        if()
+                        _program_status++;
+                        collecting_point = new Point(x, y);
                     }
                 }
             }
@@ -123,11 +108,6 @@ namespace COP
             bytes.Add(pixel.B);
 
             _file_size[1] = bytes_to_number(bytes); 
-        }
-
-        private ulong bytes_to_number(List<byte> bytes)
-        {
-            return 0;
         }
 
         private void getdata()

@@ -72,7 +72,7 @@ namespace COP
             public Size Header_Window_Size = new Size(2, 2);
             public Size Broadcast_Window_Size = new Size(10, 10);
 
-            public byte[,] Agreed_Mark = new byte[2, 2] { { 255, 0 }, { 0, 255 } };
+            public CodedPixel[] Agreed_Mark = new CodedPixel[2] { new CodedPixel(0, 255, 0), new CodedPixel(0, 255, 0) };
         }
 
         protected void exitProg()
